@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Code It! — مغامرة تعلّم البرمجة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#150e33;
+    --bg2:#1f1550;
+    --bg3:#2a1b66;
+    --bg3-hover:#33217c;
+    --gold:#ffb238;
+    --teal:#2fe0c4;
+    --pink:#ff6fa5;
+    --text:#f3efff;
+    --text-dim:#b9aedd;
+    --success:#4ade80;
+    --danger:#ff6161;
+    --radius:20px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Cairo', sans-serif;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(255,111,165,0.15), transparent 40%),
+      radial-gradient(circle at 85% 25%, rgba(47,224,196,0.15), transparent 40%),
+      var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  .font-display{font-family:'Lalezar', 'Cairo', sans-serif; letter-spacing:.5px;}
+  a{color:inherit; text-decoration:none;}
+  button{font-family:inherit; cursor:pointer; border:none;}
+  @media (prefers-reduced-motion: reduce){ *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;} }
+
+  .stars{position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.6;}
+  .stars span{position:absolute; width:3px; height:3px; background:#fff; border-radius:50%; opacity:.5; animation:twinkle 3.5s ease-in-out infinite;}
+  @keyframes twinkle{0%,100%{opacity:.15} 50%{opacity:.8}}
+
+  header{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 24px;
+    background:rgba(21,14,51,0.75);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(255,255,255,0.06);
+  }
+  .logo{display:flex; align-items:center; gap:8px; font-size:1.5rem;}
+  .logo b{font-family:'Lalezar'; font-size:1.7rem; color:var(--gold);}
+  .header-right{display:flex; align-items:center; gap:12px;}
+  .pill{
+    display:flex; align-items:center; gap:6px;
+    background:var(--bg3); padding:6px 14px; border-radius:999px;
+    font-weight:700; font-size:.9rem; color:var(--gold);
+  }
+  .btn{
+    padding:10px 22px; border-radius:999px; font-weight:700; font-size:.95rem;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn:focus-visible{outline:3px solid var(--teal); outline-offset:2px;}
+  .btn-primary{background:linear-gradient(135deg,var(--gold),#ff8a3d); color:#231200; box-shadow:0 6px 18px rgba(255,178,56,.35);}
+  .btn-ghost{background:transparent; border:2px solid rgba(255,255,255,0.18); color:var(--text);}
+  .btn-ghost:hover{border-color:var(--teal);}
+  .btn-sm{padding:7px 16px; font-size:.85rem;}
+
+  main{position:relative; z-index:1; max-width:1100px; margin:0 auto; padding:0 20px;}
+  section{display:none;}
+  section.active{display:block;}
+
+  .hero{
+    display:flex; flex-direction:column; align-items:center; text-align:center;
+    padding:70px 10px 40px;
+  }
+  .hero .badge{
+    background:var(--bg3); color:var(--teal); padding:6px 16px; border-radius:999px;
+    font-weight:700; font-size:.85rem; margin-bottom:22px; border:1px solid rgba(47,224,196,.35);
+  }
+  .hero h1{
+    font-size:clamp(2.4rem, 6vw, 4.2rem); line-height:1.15;
+    background:linear-gradient(90deg, var(--gold), var(--pink) 60%, var(--teal));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    margin-bottom:18px;
+  }
+  .hero p{color:var(--text-dim); font-size:1.15rem; max-width:560px; margin-bottom:34px;}
+  .hero-actions{display:flex; gap:14px; flex-wrap:wrap; justify-content:center;}
+
+  .mascot-wrap{position:relative; width:230px; height:230px; margin:10px auto 30px;}
+  .mascot{
+    font-size:120px; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    animation:float 3.5s ease-in-out infinite;
+    filter:drop-shadow(0 10px 25px rgba(255,178,56,.35));
+  }
+  @keyframes float{0%,100%{transform:translateY(0) rotate(-3deg)} 50%{transform:translateY(-14px) rotate(3deg)}}
+  .mascot-ring{position:absolute; inset:0; border-radius:50%; border:2px dashed rgba(255,255,255,.15); animation:spin 18s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .why{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px;
+    padding:20px 0 80px;
+  }
+  .why .card{
+    background:var(--bg2); border-radius:var(--radius); padding:22px;
+    border:1px solid rgba(255,255,255,.06);
+  }
+  .why .card .ic{font-size:1.9rem; margin-bottom:10px; display:block;}
+  .why .card h3{font-family:'Lalezar'; font-size:1.2rem; margin-bottom:6px; color:var(--gold);}
+  .why .card p{color:var(--text-dim); font-size:.92rem; line-height:1.6;}
+
+  .auth-box{
+    max-width:420px; margin:60px auto; background:var(--bg2); border-radius:var(--radius);
+    padding:34px 28px; border:1px solid rgba(255,255,255,.07);
+  }
+  .auth-tabs{display:flex; background:var(--bg3); border-radius:999px; padding:5px; margin-bottom:24px;}
+  .auth-tabs button{flex:1; padding:9px; border-radius:999px; font-weight:700; color:var(--text-dim); background:transparent;}
+  .auth-tabs button.active{background:var(--gold); color:#231200;}
+  .field{margin-bottom:14px;}
+  .field label{display:block; font-size:.85rem; margin-bottom:6px; color:var(--text-dim); font-weight:700;}
+  .field input, .field select{
+    width:100%; padding:12px 14px; border-radius:12px; border:2px solid rgba(255,255,255,.08);
+    background:var(--bg); color:var(--text); font-family:inherit; font-size:.95rem;
+  }
+  .field input:focus, .field select:focus{outline:none; border-color:var(--teal);}
+  .auth-msg{font-size:.85rem; margin-top:10px; padding:10px 12px; border-radius:10px; display:none;}
+  .auth-msg.error{display:block; background:rgba(255,97,97,.12); color:var(--danger);}
+  .auth-msg.ok{display:block; background:rgba(74,222,128,.12); color:var(--success);}
+  .auth-box .btn{width:100%; margin-top:8px;}
+
+  .map-head{display:flex; align-items:center; justify-content:space-between; padding:34px 0 10px; flex-wrap:wrap; gap:14px;}
+  .map-head h2{font-family:'Lalezar'; font-size:2rem; color:var(--gold);}
+  .stars-total{display:flex; align-items:center; gap:8px; background:var(--bg2); padding:10px 18px; border-radius:999px; font-weight:700;}
+
+  .path-wrap{position:relative; padding:40px 0 80px;}
+  .world{position:relative; margin-bottom:70px;}
+  .world-title{font-family:'Lalezar'; font-size:1.5rem; margin-bottom:18px; display:flex; align-items:center; gap:10px;}
+  .world-title .dot{width:10px; height:10px; border-radius:50%; background:var(--teal);}
+  .nodes{position:relative; z-index:1; display:flex; flex-direction:column; gap:26px;}
+  .node-row{display:flex;}
+  .node-row.right{justify-content:flex-end;}
+  .node-row.left{justify-content:flex-start;}
+  .node{
+    width:150px; background:var(--bg2); border:2px solid rgba(255,255,255,.08); border-radius:18px;
+    padding:14px; text-align:center; transition:transform .15s ease, border-color .15s ease;
+  }
+  .node.unlocked{cursor:pointer; border-color:rgba(47,224,196,.4);}
+  .node.unlocked:hover{transform:translateY(-4px); border-color:var(--teal);}
+  .node.done{border-color:var(--gold); background:linear-gradient(160deg, var(--bg2), rgba(255,178,56,.08));}
+  .node.locked{opacity:.45;}
+  .node .n-ic{font-size:2rem; display:block; margin-bottom:6px;}
+  .node .n-title{font-weight:700; font-size:.88rem; margin-bottom:4px;}
+  .node .n-stars{font-size:.8rem; color:var(--gold);}
+
+  .lesson-wrap{padding:30px 0 90px;}
+  .story-box{
+    display:flex; gap:16px; background:var(--bg2); border-radius:var(--radius); padding:20px;
+    margin-bottom:24px; align-items:flex-start; border:1px solid rgba(255,255,255,.06);
+  }
+  .story-box .m{font-size:2.6rem;}
+  .story-box .bubble{background:var(--bg3); padding:14px 18px; border-radius:16px; line-height:1.8; font-size:.98rem;}
+
+  .game-area{display:grid; grid-template-columns:1fr; gap:22px;}
+  @media(min-width:760px){ .game-area{grid-template-columns:1fr 340px;} }
+
+  .grid-box{background:var(--bg2); border-radius:var(--radius); padding:20px; border:1px solid rgba(255,255,255,.06);}
+  .grid5{display:grid; grid-template-columns:repeat(5, 1fr); gap:6px; max-width:340px; margin:0 auto; aspect-ratio:1/1;}
+  .cell{background:var(--bg3); border-radius:8px; position:relative; display:flex; align-items:center; justify-content:center; font-size:1.4rem;}
+  .cell.goal{background:rgba(255,178,56,.18); box-shadow:inset 0 0 0 2px var(--gold);}
+  .player{transition:transform .35s ease; font-size:1.6rem;}
+
+  .controls-box{background:var(--bg2); border-radius:var(--radius); padding:20px; border:1px solid rgba(255,255,255,.06); display:flex; flex-direction:column; gap:14px;}
+  .block-btns{display:flex; gap:8px; flex-wrap:wrap;}
+  .block-btn{background:var(--bg3); color:var(--text); padding:10px 12px; border-radius:12px; font-weight:700; font-size:.85rem; flex:1; min-width:90px;}
+  .block-btn:hover{background:var(--bg3-hover);}
+  .program{
+    background:var(--bg); border-radius:12px; padding:10px; min-height:64px;
+    display:flex; flex-wrap:wrap; gap:6px; align-items:flex-start; border:1px dashed rgba(255,255,255,.15);
+  }
+  .program .p-item{background:var(--pink); color:#2a0016; font-weight:700; padding:6px 10px; border-radius:8px; font-size:.8rem;}
+  .run-row{display:flex; gap:10px;}
+  .run-row button{flex:1;}
+  .status{font-size:.85rem; min-height:20px; font-weight:700;}
+  .status.ok{color:var(--success);}
+  .status.err{color:var(--danger);}
+
+  footer{text-align:center; color:var(--text-dim); font-size:.8rem; padding:30px 20px 50px;}
+
+  .toast{
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(120%);
+    background:var(--bg3); border:1px solid var(--gold); color:var(--text); padding:14px 24px;
+    border-radius:14px; font-weight:700; z-index:200; transition:transform .3s ease;
+  }
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  .hidden{display:none !important;}
+</style>
+</head>
+<body>
+
+<div class="stars" id="starsBg"></div>
+
+<header>
+  <div class="logo">🧑‍💻 <b>Code It!</b></div>
+  <div class="header-right" id="headerRight">
+    <a href="#/auth" class="btn btn-ghost btn-sm">تسجيل الدخول</a>
+  </div>
+</header>
+
+<main>
+
+  <section id="view-landing" class="active">
+    <div class="hero">
+      <span class="badge">🌟 رحلة برمجة للأعمار من ٧ إلى ١٨ سنة</span>
+      <div class="mascot-wrap">
+        <div class="mascot-ring"></div>
+        <div class="mascot">🧙‍♂️</div>
+      </div>
+      <h1 class="font-display">اكتشف عالم الكود</h1>
+      <p>مغامرة تفاعلية تأخذك جزيرة بجزيرة، من أول أمر بسيط حتى بناء أول موقع أو لعبة بنفسك. تعلّم عن طريق القصة، لا عن طريق الحفظ.</p>
+      <div class="hero-actions">
+        <a href="#/auth?tab=signup" class="btn btn-primary">ابدأ المغامرة مجانًا</a>
+        <a href="#/auth?tab=login" class="btn btn-ghost">عندي حساب بالفعل</a>
+      </div>
+    </div>
+
+    <div class="why">
+      <div class="card">
+        <span class="ic">🗺️</span>
+        <h3>خريطة قصة حقيقية</h3>
+        <p>كل مفهوم برمجي (تسلسل، تكرار، شروط...) جزيرة في خريطة كبيرة، تتقدّم فيها فصلًا بعد فصل.</p>
+      </div>
+      <div class="card">
+        <span class="ic">🧩</span>
+        <h3>تعلّم باللعب</h3>
+        <p>ألغاز وتحديات تفاعلية بدل الشرح النظري، عشان الفكرة تثبت في دماغك أسرع.</p>
+      </div>
+      <div class="card">
+        <span class="ic">🏆</span>
+        <h3>نجوم وتقدّم محفوظ</h3>
+        <p>احصل على نجوم مع كل تحدي، ويُحفظ تقدمك تلقائيًا حتى ترجع في أي وقت.</p>
+      </div>
+      <div class="card">
+        <span class="ic">🐍</span>
+        <h3>من البصري إلى الحقيقي</h3>
+        <p>تبدأ بأوامر بسيطة بالسحب والإفلات، ثم تنتقل تدريجيًا لبايثون وجافاسكريبت وHTML.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-auth">
+    <div class="auth-box">
+      <div class="auth-tabs">
+        <button id="tabLogin" class="active" onclick="setAuthTab('login')">تسجيل الدخول</button>
+        <button id="tabSignup" onclick="setAuthTab('signup')">حساب جديد</button>
+      </div>
+
+      <form id="formLogin" onsubmit="return handleLogin(event)">
+        <div class="field">
+          <label>البريد الإلكتروني</label>
+          <input type="email" id="loginEmail" required placeholder="example@mail.com">
+        </div>
+        <div class="field">
+          <label>كلمة المرور</label>
+          <input type="password" id="loginPassword" required placeholder="••••••••">
+        </div>
+        <button class="btn btn-primary" type="submit">دخول</button>
+        <div class="auth-msg" id="loginMsg"></div>
+      </form>
+
+      <form id="formSignup" class="hidden" onsubmit="return handleSignup(event)">
+        <div class="field">
+          <label>اسمك</label>
+          <input type="text" id="suName" required placeholder="اسمك أو اسم البطل بتاعك">
+        </div>
+        <div class="field">
+          <label>عمرك</label>
+          <select id="suAge" required>
+            <option value="">اختر عمرك</option>
+            <option>7</option><option>8</option><option>9</option><option>10</option>
+            <option>11</option><option>12</option><option>13</option><option>14</option>
+            <option>15</option><option>16</option><option>17</option><option>18</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>البريد الإلكتروني</label>
+          <input type="email" id="suEmail" required placeholder="example@mail.com">
+        </div>
+        <div class="field">
+          <label>كلمة المرور</label>
+          <input type="password" id="suPassword" required minlength="6" placeholder="6 أحرف على الأقل">
+        </div>
+        <button class="btn btn-primary" type="submit">إنشاء الحساب والانطلاق 🚀</button>
+        <div class="auth-msg" id="signupMsg"></div>
+      </form>
+    </div>
+  </section>
+
+  <section id="view-map">
+    <div class="map-head">
+      <h2 class="font-display">🗺️ خريطة المغامرة</h2>
+      <div class="stars-total">⭐ <span id="totalStarsLabel">0</span> نجمة</div>
+    </div>
+    <div class="path-wrap" id="worldsContainer"></div>
+  </section>
+
+  <section id="view-lesson">
+    <div class="lesson-wrap">
+      <button class="btn btn-ghost btn-sm" onclick="location.hash='#/map'" style="margin-bottom:18px;">→ رجوع للخريطة</button>
+
+      <div class="story-box">
+        <div class="m">🧙‍♂️</div>
+        <div class="bubble" id="storyText">
+          أهلًا أيها البطل! أول شيء يتعلّمه أي مبرمج هو <b>التسلسل</b>: أن الكمبيوتر ينفّذ الأوامر بالترتيب، خطوة بعد خطوة، بدون أن يفكّر أو يخمّن. رتّب لي الأوامر الصحيحة عشان تساعدني أوصل للكنز! 💰
+        </div>
+      </div>
+
+      <div class="game-area">
+        <div class="grid-box">
+          <div class="grid5" id="grid5"></div>
+        </div>
+        <div class="controls-box">
+          <div>
+            <label style="font-weight:700; font-size:.85rem; color:var(--text-dim);">لبنات الأوامر</label>
+            <div class="block-btns" style="margin-top:8px;">
+              <button class="block-btn" onclick="addBlock('forward')">⬆️ تقدّم</button>
+              <button class="block-btn" onclick="addBlock('left')">↩️ لف يسار</button>
+              <button class="block-btn" onclick="addBlock('right')">↪️ لف يمين</button>
+            </div>
+          </div>
+          <div>
+            <label style="font-weight:700; font-size:.85rem; color:var(--text-dim);">برنامجك</label>
+            <div class="program" id="program"></div>
+          </div>
+          <div class="run-row">
+            <button class="btn btn-primary btn-sm" onclick="runProgram()">▶️ شغّل</button>
+            <button class="btn btn-ghost btn-sm" onclick="resetProgram()">↺ إعادة</button>
+          </div>
+          <div class="status" id="statusMsg"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>Code It! — صُنع بـ 💛 لمبرمجي المستقبل</footer>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SUPABASE_URL = "https://mxktshbjaeoidrvfmxbg.supabase.co";
+const SUPABASE_KEY = "sb_publishable_w-dkK2GZml1OSHND1lvAVA_9LhuK7Cn";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let currentUser = null;
+let currentProfile = null;
+let progressMap = {};
+
+(function(){
+  const box = document.getElementById('starsBg');
+  for(let i=0;i<60;i++){
+    const s = document.createElement('span');
+    s.style.left = Math.random()*100+'%';
+    s.style.top = Math.random()*100+'%';
+    s.style.animationDelay = (Math.random()*3)+'s';
+    box.appendChild(s);
+  }
+})();
+
+const WORLDS = [
+  {
+    id:'blocks', title:'🧩 جزيرة الأوامر الأولى', icon:'🧩',
+    chapters:[
+      {id:'sequence1', title:'التسلسل: أول أمر', icon:'🧭', playable:true},
+      {id:'loops1', title:'التكرار: لا تكرر نفسك', icon:'🔁', playable:false},
+      {id:'cond1', title:'الشروط: إذا... وإلا', icon:'❓', playable:false},
+    ]
+  },
+  {
+    id:'python', title:'🐍 أرض بايثون', icon:'🐍',
+    chapters:[
+      {id:'vars', title:'المتغيرات: صناديق البيانات', icon:'📦', playable:false},
+      {id:'funcs', title:'الدوال: أوامرك الخاصة', icon:'🛠️', playable:false},
+      {id:'lists', title:'القوائم: جمع الكنوز', icon:'🎒', playable:false},
+    ]
+  },
+  {
+    id:'web', title:'🏰 قلعة الويب (HTML/CSS)', icon:'🏰',
+    chapters:[
+      {id:'html1', title:'بناء صفحة أولى', icon:'📜', playable:false},
+      {id:'css1', title:'الألوان والتنسيق', icon:'🎨', playable:false},
+    ]
+  },
+  {
+    id:'js', title:'⚡ مدينة جافاسكريبت', icon:'⚡',
+    chapters:[
+      {id:'events1', title:'التفاعل مع الأزرار', icon:'👆', playable:false},
+      {id:'dom1', title:'تغيير الصفحة حيًا', icon:'✨', playable:false},
+    ]
+  }
+];
+
+function router(){
+  const hash = location.hash || '#/';
+  const [path, queryStr] = hash.replace('#','').split('?');
+  const params = new URLSearchParams(queryStr||'');
+
+  document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+
+  if(path === '/' || path === ''){
+    document.getElementById('view-landing').classList.add('active');
+  } else if(path === '/auth'){
+    document.getElementById('view-auth').classList.add('active');
+    if(params.get('tab')==='signup') setAuthTab('signup'); else setAuthTab('login');
+  } else if(path === '/map'){
+    if(!currentUser){ location.hash='#/auth'; return; }
+    document.getElementById('view-map').classList.add('active');
+    renderMap();
+  } else if(path.startsWith('/lesson/')){
+    if(!currentUser){ location.hash='#/auth'; return; }
+    const parts = path.split('/');
+    openLesson(parts[2], parts[3]);
+    document.getElementById('view-lesson').classList.add('active');
+  }
+  window.scrollTo({top:0, behavior:'instant'});
+}
+window.addEventListener('hashchange', router);
+
+function setAuthTab(tab){
+  const isLogin = tab==='login';
+  document.getElementById('tabLogin').classList.toggle('active', isLogin);
+  document.getElementById('tabSignup').classList.toggle('active', !isLogin);
+  document.getElementById('formLogin').classList.toggle('hidden', !isLogin);
+  document.getElementById('formSignup').classList.toggle('hidden', isLogin);
+}
+
+function showMsg(id, text, ok){
+  const el = document.getElementById(id);
+  el.textContent = text;
+  el.className = 'auth-msg ' + (ok ? 'ok':'error');
+}
+
+async function handleLogin(e){
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  const {data, error} = await sb.auth.signInWithPassword({email, password});
+  if(error){ showMsg('loginMsg', 'تعذّر الدخول: ' + error.message, false); return false; }
+  await loadSession();
+  location.hash = '#/map';
+  return false;
+}
+
+async function handleSignup(e){
+  e.preventDefault();
+  const name = document.getElementById('suName').value;
+  const age = document.getElementById('suAge').value;
+  const email = document.getElementById('suEmail').value;
+  const password = document.getElementById('suPassword').value;
+
+  const {data, error} = await sb.auth.signUp({email, password});
+  if(error){ showMsg('signupMsg', 'تعذّر إنشاء الحساب: ' + error.message, false); return false; }
+
+  if(data.user){
+    const {error: profErr} = await sb.from('profiles').insert({
+      id: data.user.id, username: name, age: Number(age)
+    });
+    if(profErr) console.warn('profile insert:', profErr.message);
+  }
+
+  if(data.session){
+    await loadSession();
+    location.hash = '#/map';
+  } else {
+    showMsg('signupMsg', 'تم إنشاء الحساب! تحقّق من بريدك الإلكتروني لتأكيد الحساب ثم سجّل الدخول.', true);
+  }
+  return false;
+}
+
+async function handleLogout(){
+  await sb.auth.signOut();
+  currentUser = null; currentProfile = null; progressMap = {};
+  updateHeader();
+  location.hash = '#/';
+}
+
+function updateHeader(){
+  const box = document.getElementById('headerRight');
+  if(currentUser){
+    box.innerHTML = `
+      <span class="pill">⭐ <span id="hStars">${totalStars()}</span></span>
+      <span class="pill">🧙‍♂️ ${currentProfile ? currentProfile.username : ''}</span>
+      <button class="btn btn-ghost btn-sm" onclick="handleLogout()">خروج</button>
+    `;
+  } else {
+    box.innerHTML = `<a href="#/auth" class="btn btn-ghost btn-sm">تسجيل الدخول</a>`;
+  }
+}
+
+function totalStars(){
+  return Object.values(progressMap).reduce((a,b)=>a+b, 0);
+}
+
+async function loadSession(){
+  const {data:{session}} = await sb.auth.getSession();
+  if(!session){ currentUser=null; currentProfile=null; updateHeader(); return; }
+  currentUser = session.user;
+
+  const {data: profile} = await sb.from('profiles').select('*').eq('id', currentUser.id).maybeSingle();
+  currentProfile = profile;
+
+  const {data: prog} = await sb.from('progress').select('*').eq('user_id', currentUser.id);
+  progressMap = {};
+  (prog||[]).forEach(p => progressMap[p.world_id+':'+p.chapter_id] = p.stars || 1);
+
+  updateHeader();
+}
+
+function isChapterUnlocked(worldIndex, chapterIndex){
+  if(worldIndex===0 && chapterIndex===0) return true;
+  const w = WORLDS[worldIndex];
+  if(chapterIndex>0){
+    const prevCh = w.chapters[chapterIndex-1];
+    return !!progressMap[w.id+':'+prevCh.id];
+  } else {
+    const prevWorld = WORLDS[worldIndex-1];
+    const lastCh = prevWorld.chapters[prevWorld.chapters.length-1];
+    return !!progressMap[prevWorld.id+':'+lastCh.id];
+  }
+}
+
+function renderMap(){
+  document.getElementById('totalStarsLabel').textContent = totalStars();
+  const container = document.getElementById('worldsContainer');
+  container.innerHTML = '';
+
+  WORLDS.forEach((world, wi)=>{
+    const worldEl = document.createElement('div');
+    worldEl.className = 'world';
+    const rowsHtml = world.chapters.map((ch, ci)=>{
+      const done = !!progressMap[world.id+':'+ch.id];
+      const unlocked = isChapterUnlocked(wi, ci);
+      const side = ci % 2 === 0 ? 'right' : 'left';
+      let cls = 'node ';
+      cls += done ? 'done' : (unlocked ? 'unlocked' : 'locked');
+      const clickAttr = (unlocked && ch.playable) ? `onclick="location.hash='#/lesson/${world.id}/${ch.id}'"` :
+                         (unlocked ? `onclick="comingSoon()"` : '');
+      return `
+        <div class="node-row ${side}">
+          <div class="${cls}" ${clickAttr}>
+            <span class="n-ic">${ch.icon}</span>
+            <div class="n-title">${ch.title}</div>
+            <div class="n-stars">${done ? '⭐ اكتمل' : (unlocked ? 'ابدأ →' : '🔒 مقفل')}</div>
+          </div>
+        </div>`;
+    }).join('');
+
+    worldEl.innerHTML = `
+      <div class="world-title"><span class="dot"></span> ${world.title}</div>
+      <div class="nodes">${rowsHtml}</div>
+    `;
+    container.appendChild(worldEl);
+  });
+}
+
+function comingSoon(){
+  showToast('هذا الفصل قادم قريبًا! 🚧 جرّب فصل "التسلسل" الأول الآن.');
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2600);
+}
+
+let currentWorldId = null, currentChapterId = null;
+let program = [];
+const GRID_SIZE = 5;
+const START = {r:4, c:0, dir:0};
+const GOAL  = {r:0, c:4};
+
+function openLesson(worldId, chapterId){
+  currentWorldId = worldId; currentChapterId = chapterId;
+  program = [];
+  renderProgram();
+  document.getElementById('statusMsg').textContent = '';
+  buildGrid();
+}
+
+function buildGrid(){
+  const grid = document.getElementById('grid5');
+  grid.innerHTML = '';
+  for(let r=0;r<GRID_SIZE;r++){
+    for(let c=0;c<GRID_SIZE;c++){
+      const cell = document.createElement('div');
+      cell.className = 'cell' + ((r===GOAL.r && c===GOAL.c) ? ' goal' : '');
+      cell.id = `cell-${r}-${c}`;
+      if(r===GOAL.r && c===GOAL.c) cell.textContent = '💰';
+      if(r===START.r && c===START.c){
+        const p = document.createElement('span');
+        p.className='player'; p.id='playerEl'; p.textContent = dirEmoji(START.dir);
+        cell.appendChild(p);
+      }
+      grid.appendChild(cell);
+    }
+  }
+}
+
+function dirEmoji(dir){
+  return ['⬆️','➡️','⬇️','⬅️'][dir];
+}
+
+function addBlock(type){
+  program.push(type);
+  renderProgram();
+}
+
+function renderProgram(){
+  const box = document.getElementById('program');
+  box.innerHTML = '';
+  if(program.length===0){ box.innerHTML = '<span style="color:var(--text-dim); font-size:.85rem;">اضغط على اللبنات فوق لإضافتها هنا</span>'; return; }
+  const labels = {forward:'⬆️ تقدّم', left:'↩️ يسار', right:'↪️ يمين'};
+  program.forEach((p)=>{
+    const b = document.createElement('span');
+    b.className='p-item';
+    b.textContent = labels[p];
+    box.appendChild(b);
+  });
+}
+
+function resetProgram(){
+  program = [];
+  renderProgram();
+  buildGrid();
+  document.getElementById('statusMsg').textContent = '';
+}
+
+async function runProgram(){
+  buildGrid();
+  const statusEl = document.getElementById('statusMsg');
+  statusEl.className='status'; statusEl.textContent='...جاري التنفيذ';
+
+  let {r,c,dir} = {...START};
+  for(const step of program){
+    if(step==='left') dir = (dir+3)%4;
+    else if(step==='right') dir = (dir+1)%4;
+    else if(step==='forward'){
+      if(dir===0) r--; else if(dir===1) c++; else if(dir===2) r++; else c--;
+      if(r<0||r>=GRID_SIZE||c<0||c>=GRID_SIZE){
+        statusEl.className='status err'; statusEl.textContent='😵 اصطدمت بحافة الجزيرة! أعد ترتيب الأوامر.';
+        return;
+      }
+    }
+    await movePlayerTo(r,c,dir);
+    await sleep(320);
+  }
+
+  if(r===GOAL.r && c===GOAL.c){
+    statusEl.className='status ok'; statusEl.textContent='🎉 وصلت للكنز! أحسنت ترتيب الأوامر بالتسلسل الصحيح.';
+    await saveProgress(currentWorldId, currentChapterId, 3);
+    showToast('+3 نجوم! ⭐⭐⭐');
+  } else {
+    statusEl.className='status err'; statusEl.textContent='لم تصل للكنز بعد. جرّب ترتيبًا آخر!';
+  }
+}
+
+function movePlayerTo(r,c,dir){
+  return new Promise(resolve=>{
+    const old = document.getElementById('playerEl');
+    if(old) old.remove();
+    const cell = document.getElementById(`cell-${r}-${c}`);
+    const p = document.createElement('span');
+    p.className='player'; p.id='playerEl'; p.textContent = dirEmoji(dir);
+    cell.appendChild(p);
+    resolve();
+  });
+}
+
+function sleep(ms){ return new Promise(res=>setTimeout(res, ms)); }
+
+async function saveProgress(worldId, chapterId, stars){
+  progressMap[worldId+':'+chapterId] = stars;
+  updateHeader();
+  if(!currentUser) return;
+  const {error} = await sb.from('progress').upsert({
+    user_id: currentUser.id, world_id: worldId, chapter_id: chapterId, stars
+  }, {onConflict:'user_id,world_id,chapter_id'});
+  if(error) console.warn('progress save error:', error.message);
+}
+
+(async function init(){
+  await loadSession();
+  router();
+})();
+</script>
+</body>
+</html>
